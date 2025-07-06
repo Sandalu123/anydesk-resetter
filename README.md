@@ -2,6 +2,9 @@
 
 A comprehensive Windows batch script to completely remove AnyDesk from your system, including all user data, driver files, and temporary files.
 
+> **⚠️ Important: Uninstall AnyDesk First**  
+> Before running this script, **uninstall AnyDesk through Windows Settings or Control Panel**. This script removes residual files and components that remain after the standard uninstall process.
+
 ## 🚀 Quick Start
 
 **One-liner to download and execute:**
@@ -21,15 +24,21 @@ curl -L https://raw.githubusercontent.com/Sandalu123/anydesk-resetter/main/anyde
 
 ## 🛠️ What It Does
 
-The script performs the following operations:
+This script is designed to clean up **residual files and components** that remain after uninstalling AnyDesk through standard Windows uninstall methods. It performs the following operations:
 
-1. **Process Termination**: Safely terminates any running AnyDesk processes
-2. **User Data Cleanup**: Removes AnyDesk user data directory (`%AppData%\AnyDesk`)
-3. **Driver Store Cleanup**: Removes AnyDesk drivers from Windows driver store
+1. **Process Termination**: Safely terminates any remaining AnyDesk processes
+2. **User Data Cleanup**: Removes leftover AnyDesk user data directory (`%AppData%\AnyDesk`)
+3. **Driver Store Cleanup**: Removes AnyDesk drivers from Windows driver store that aren't removed by standard uninstall
 4. **Temporary Files**: Cleans temporary files that might contain AnyDesk data
-5. **Verification**: Confirms successful removal of all components
+5. **Verification**: Confirms successful removal of all residual components
 
 ## 📥 Installation & Usage
+
+### Prerequisites
+**Before using this script:**
+1. **Uninstall AnyDesk** through Windows Settings (Apps & Features) or Control Panel (Programs and Features)
+2. **Restart your computer** (recommended)
+3. **Run this script** to clean up remaining files and registry entries
 
 ### Method 1: Direct Download and Execute
 ```bash
@@ -61,10 +70,12 @@ anydesk-resetter.bat
 
 ## ⚠️ Important Notes
 
+- **Uninstall First**: Always uninstall AnyDesk through Windows Settings/Control Panel before running this script
 - **Administrator Rights**: The script requires administrator privileges to access system directories and driver store
-- **AnyDesk Closure**: The script will automatically close AnyDesk if it's running
-- **Backup Warning**: This script permanently removes AnyDesk and its data. Backup any important AnyDesk configurations before running
+- **AnyDesk Closure**: The script will automatically close any remaining AnyDesk processes
+- **Backup Warning**: This script permanently removes AnyDesk residual data. Backup any important AnyDesk configurations before running
 - **Antivirus**: Some antivirus software may flag the script due to its system-level operations
+- **Restart Recommended**: Restart your computer before running the script for best results
 
 ## 🖼️ Interface Preview
 
@@ -90,11 +101,13 @@ anydesk-resetter.bat
 ### Common Issues
 
 **Script won't run:**
+- Ensure you've uninstalled AnyDesk first through Windows Settings
 - Ensure you're running as Administrator
 - Check if PowerShell execution policy allows the script
 - Verify Windows version compatibility
 
 **Partial removal:**
+- Make sure you uninstalled AnyDesk properly before running the script
 - Some files may be locked by other processes
 - Try restarting Windows and running the script again
 - Check antivirus software for quarantined files
