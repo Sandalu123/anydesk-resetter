@@ -38,7 +38,7 @@ set "errorCount=0"
 set "successCount=0"
 
 :: Main execution flow
-call :KillAnydeskProcesses
+call :KillAnyDeskProcesses
 call :CleanUserData
 call :CleanDriverStore
 call :CleanTempFiles
@@ -63,7 +63,7 @@ echo  ╚═══════════════════════�
 echo.
 goto :eof
 
-:KillAnydeskProcesses
+:KillAnyDeskProcesses
 echo [STEP 1/5] Terminating AnyDesk processes...
 echo ─────────────────────────────────────────────────────────────────────────
 tasklist | find /i "AnyDesk.exe" >nul 2>&1
@@ -88,19 +88,36 @@ echo [STEP 2/5] Cleaning user data directory...
 echo ─────────────────────────────────────────────────────────────────────────
 if exist "!targetFolder!" (
     echo [INFO] Removing AnyDesk user data: !targetFolder!
+    
+    :: Force close any handles to the directory
+    handle.exe -a -p AnyDesk >nul 2>&1
+    
+    :: Try using robocopy to clear the directory first
+    mkdir "%temp%\empty_folder" 2>nul
+    robocopy "%temp%\empty_folder" "!targetFolder!" /purge >nul 2>&1
+    rmdir "%temp%\empty_folder" >nul 2>&1
+    
+    :: Now try to remove the directory
     rd /s /q "!targetFolder!" 2>nul
-    timeout /t 2 /nobreak >nul
+    timeout /t 3 /nobreak >nul
     
     if exist "!targetFolder!" (
-        echo [WARNING] First attempt failed. Retrying...
-        rd /s /q "!targetFolder!" 2>nul
+        echo [WARNING] First attempt failed. Trying alternative method...
+        
+        :: Use takeown and icacls for stubborn directories
+        takeown /f "!targetFolder!" /r /d y >nul 2>&1
+        icacls "!targetFolder!" /grant administrators:F /t /c /q >nul 2>&1
+        
+        :: Try PowerShell remove-item with force
+        powershell -Command "Remove-Item -Path '!targetFolder!' -Recurse -Force -ErrorAction SilentlyContinue" 2>nul
         timeout /t 2 /nobreak >nul
         
         if exist "!targetFolder!" (
-            echo [ERROR] Failed to remove user data directory.
+            echo [ERROR] Failed to remove user data directory completely.
+            echo [INFO] You may need to restart Windows and run the script again.
             set /a errorCount+=1
         ) else (
-            echo [SUCCESS] User data directory removed on second attempt.
+            echo [SUCCESS] User data directory removed with alternative method.
             set /a successCount+=1
         )
     ) else (
