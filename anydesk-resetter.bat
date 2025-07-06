@@ -56,16 +56,16 @@ exit /b 0
 
 :PrintHeader
 echo.
-echo  ╔════════════════════════════════════════════════════════════════════════╗
-echo  ║                          AnyDesk Resetter v2.0                        ║
-echo  ║                    Complete AnyDesk Removal Tool                       ║
-echo  ╚════════════════════════════════════════════════════════════════════════╝
+echo  +========================================================================+
+echo  ^|                          AnyDesk Resetter v2.0                        ^|
+echo  ^|                    Complete AnyDesk Removal Tool                       ^|
+echo  +========================================================================+
 echo.
 goto :eof
 
 :KillAnyDeskProcesses
 echo [STEP 1/5] Terminating AnyDesk processes...
-echo ─────────────────────────────────────────────────────────────────────────
+echo -------------------------------------------------------------------------
 tasklist | find /i "AnyDesk.exe" >nul 2>&1
 if !errorlevel! equ 0 (
     echo [INFO] AnyDesk process detected. Terminating...
@@ -85,7 +85,7 @@ goto :eof
 
 :CleanUserData
 echo [STEP 2/5] Cleaning user data directory...
-echo ─────────────────────────────────────────────────────────────────────────
+echo -------------------------------------------------------------------------
 if exist "!targetFolder!" (
     echo [INFO] Removing AnyDesk user data: !targetFolder!
     
@@ -132,7 +132,7 @@ goto :eof
 
 :CleanDriverStore
 echo [STEP 3/5] Cleaning driver store...
-echo ─────────────────────────────────────────────────────────────────────────
+echo -------------------------------------------------------------------------
 set "driverFound=false"
 set "driverRemoved=true"
 
@@ -189,7 +189,7 @@ goto :eof
 
 :CleanTempFiles
 echo [STEP 4/5] Cleaning temporary files...
-echo ─────────────────────────────────────────────────────────────────────────
+echo -------------------------------------------------------------------------
 echo [INFO] Cleaning temporary files directory...
 DEL /F /S /Q "%USERPROFILE%\AppData\Local\Temp\*" >nul 2>nul
 FOR /D %%P IN ("%USERPROFILE%\AppData\Local\Temp\*") DO RMDIR /S /Q "%%P" >nul 2>nul
@@ -200,7 +200,7 @@ goto :eof
 
 :VerifyCleanup
 echo [STEP 5/5] Verifying cleanup...
-echo ─────────────────────────────────────────────────────────────────────────
+echo -------------------------------------------------------------------------
 set "cleanupSuccess=true"
 
 if exist "!targetFolder!" (
@@ -229,18 +229,18 @@ echo.
 goto :eof
 
 :PrintSummary
-echo ╔════════════════════════════════════════════════════════════════════════╗
-echo ║                            OPERATION SUMMARY                           ║
-echo ╠════════════════════════════════════════════════════════════════════════╣
-echo ║ Successful Operations: !successCount!                                               ║
-echo ║ Failed Operations:     !errorCount!                                               ║
-echo ║                                                                        ║
+echo +========================================================================+
+echo ^|                            OPERATION SUMMARY                           ^|
+echo +========================================================================+
+echo ^| Successful Operations: !successCount!                                               ^|
+echo ^| Failed Operations:     !errorCount!                                               ^|
+echo ^|                                                                        ^|
 if !errorCount! equ 0 (
-    echo ║ Status: ALL OPERATIONS COMPLETED SUCCESSFULLY                         ║
-    echo ║ AnyDesk has been completely removed from your system.                 ║
+    echo ^| Status: ALL OPERATIONS COMPLETED SUCCESSFULLY                         ^|
+    echo ^| AnyDesk has been completely removed from your system.                 ^|
 ) else (
-    echo ║ Status: SOME OPERATIONS FAILED                                        ║
-    echo ║ Please review the errors above and try running the script again.      ║
+    echo ^| Status: SOME OPERATIONS FAILED                                        ^|
+    echo ^| Please review the errors above and try running the script again.      ^|
 )
-echo ╚════════════════════════════════════════════════════════════════════════╝
+echo +========================================================================+
 goto :eof
